@@ -13,6 +13,7 @@ class UrlUtils {
    * @returns {string}
    */
   static parseUrlImageFromBackgroundImage(backgroundImage) {
+    if (!backgroundImage) return "";
     const url = backgroundImage.replace('url("', "").replace('")', "");
     return url;
   }
