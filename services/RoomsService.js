@@ -12,7 +12,6 @@ class RoomsService {
      * @returns {Promise<Array>}
      */
     async getAllAvailableRooms(checkin, checkout) {
-      try {
         const browser = await BrowserService.getBrowser();
         const url = this.#getUrl(checkin, checkout);
         const page = await browser.newPage(url);
@@ -21,10 +20,6 @@ class RoomsService {
         const availableRooms = await this.#getAvailableRoomsInfo(page);
         await BrowserService.closeBrowser(browser);
         return availableRooms;
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
     }
 
     /**
@@ -33,11 +28,11 @@ class RoomsService {
      */
     async #getAvailableRoomsInfo(page) {
       const rawRoomsInfo = await page.$$eval(".room-option", (room) => {
-        return room.map((room) => {
-          const name = room.querySelector(".room-option-title span").innerText;
-          const price = room.querySelector(".daily-price--total .term").innerText;
-          const image = room.querySelector(".q-carousel__slides-container .q-carousel__slide").style.backgroundImage;
-          const description = room.querySelector(".room-infos-guests-block p").innerText;
+        return room?.map((room) => {
+          const name = room?.querySelector(".room-option-title span")?.innerText;
+          const price = room?.querySelector(".daily-price--total .term")?.innerText;
+          const image = room?.querySelector(".q-carousel__slides-container .q-carousel__slide")?.style?.backgroundImage;
+          const description = room?.querySelector(".room-infos-guests-block p")?.innerText;
           return {
             name,
             price,
