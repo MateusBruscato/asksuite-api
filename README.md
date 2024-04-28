@@ -5,7 +5,7 @@ To run this project, you'll need:
 
 1) Docker installed in your PC.
 
-OR
+    OR
 
 2) Node 18+ and npm installed in your PC.
 
