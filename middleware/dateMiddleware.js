@@ -15,25 +15,36 @@ function dateMiddleware(req, res, next) {
             .json({ message: 'Missing check-in or check-out date' });
     }
 
-    const areDateValid = moment(checkin, DATE_PATTERN).isValid() && moment(checkout, DATE_PATTERN).isValid();
+    const checkinFormatted = moment(checkin, DATE_PATTERN);
+    const checkoutFormatted = moment(checkout, DATE_PATTERN);
+    
+    const areDateValid = checkinFormatted.isValid() && checkoutFormatted.isValid();
     if (!areDateValid) {
         return res
             .status(400)
             .json({ message: 'Invalid date, please use YYYY-MM-DD format or check if the date is valid' });
     }
 
-    const isCheckinBeforeToday = moment(checkin, DATE_PATTERN).isBefore(moment().format(DATE_PATTERN));
+    const isCheckinBeforeToday = checkinFormatted.isBefore(moment().format(DATE_PATTERN));
     if (isCheckinBeforeToday) {
         return res
             .status(400)
-            .send({ message: 'Check-in date must be equal to or higher than today' });
+            .send({ message: 'Check-in date must be before checkout date' });
     }
     
-    const isCheckinBeforeCheckout = moment(checkin).isBefore(checkout);
+    const isCheckinBeforeCheckout = checkinFormatted.isBefore(checkout, DATE_PATTERN);
     if (!isCheckinBeforeCheckout) {
         return res
             .status(400)
             .send({ message: 'Check-in date must be before checkout date' });
+    }
+
+    const monthsAheadFromToday = moment().add(process.env.LIMIT_MONTHS_AHEAD, "month");
+    const checkinIsTooFarFromToday = checkinFormatted.isAfter(monthsAheadFromToday);
+    if (checkinIsTooFarFromToday) {
+        return res
+            .status(400)
+            .send({ message: 'Check-in is far ahead, please try a sooner date.'})
     }
 
     next();
