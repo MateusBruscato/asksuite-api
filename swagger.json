@@ -1,0 +1,74 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "API Test Asksuite",
+		"description": "API",
+		"version": "1.0.0"
+	},
+	"paths": {
+		"/search": {
+			"post": {
+				"description": "Search all available rooms in the hotel",
+				"requestBody": {
+					"description": "Data to search rooms",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"checkin": {
+										"type": "string",
+										"format": "date",
+										"example": "2024-05-01"
+									},
+									"checkout": {
+										"type": "string",
+										"format": "date",
+										"example": "2024-05-06"
+									}
+								},
+								"required": ["checkin", "checkout"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Rooms found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+                                            "name": {
+                                                "type": "string",
+												"example": "Standard"
+											},
+											"price": {
+                                                "type": "string",
+												"example": "R$ 1.000,00"
+											},
+											"description": {
+                                                "type": "string",
+												"example": "A beautiful room with a view of the sea"
+											},
+                                            "image": {
+                                                "type": "string",
+                                                "example": "https://www.example.com/image.jpg"
+                                            }
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid data"
+					}
+				}
+			}
+		}
+	}
+}
