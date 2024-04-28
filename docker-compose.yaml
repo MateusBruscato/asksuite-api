@@ -10,3 +10,4 @@ services:
     environment:
       - PORT=9090
       - BASE_URL=https://pratagy.letsbook.com.br/reserva/selecao-de-quartos
+      - LIMIT_MONTHS_AHEAD=19
