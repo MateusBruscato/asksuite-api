@@ -11,9 +11,18 @@ class RoomsController {
 	 * @returns {Promise<Response>}
 	 */
 	async getAllAvailableRooms(req, res) {
-		const { checkin, checkout } = req.body;
-		const rooms = await this.roomsService.getAllAvailableRooms(checkin, checkout);
-		return res.json(rooms);
+		try {
+			const { checkin, checkout } = req.body;
+			const rooms = await this.roomsService.getAllAvailableRooms(checkin, checkout);
+			return res.json(rooms);
+		} catch (error) {
+			console.log(error);
+			return res
+				.status(500)
+				.json({
+					message: error?.message || "Ops... Something went wrong. Please, try again later."
+				})
+		}
 	}
 }
 
